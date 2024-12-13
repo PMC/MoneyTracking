@@ -38,11 +38,15 @@ public abstract class Account
 
     public void SaveToFile()
     {
+        //var file = JsonSerializerHelper.GetFullPathToJsonFile($"{AccountID.GetHashCode()}.json");
         var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
         JsonSerializerHelper.SerializeToFile(file, Transactions);
     }
 
-    public void LoadFromFile()
+    /**
+     * Load file and return datasize or -1 if json file dont exists
+     */
+    public int LoadFromFile()
     {
         var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
 
@@ -50,6 +54,9 @@ public abstract class Account
         {
             string jsonData = File.ReadAllText(file);
             Transactions = JsonSerializerHelper.Deserialize<List<Transaction>>(jsonData);
+            return jsonData.Length;
         }
+
+        return -1;
     }
 }

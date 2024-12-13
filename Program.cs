@@ -1,5 +1,6 @@
 // See https://aka.ms/new-console-template for more information
 using System.Text;
+using MoneyTracking;
 using MoneyTracking.Accounts;
 using MoneyTracking.Transactions;
 using Spectre.Console;
@@ -23,7 +24,26 @@ Account bank = BankAccountBuilder.Empty()
     .WithName("SWEDBANK")
     .Build();
 
-bank.LoadFromFile();
+var sizeOfData = bank.LoadFromFile();
+if (sizeOfData == -1 || bank.Transactions.Count == 0)
+{
+    var confirmation = AnsiConsole.Prompt(
+    new TextPrompt<bool>("[green]No Transactions found, do you want to generate demo data ?[/]")
+        .AddChoice(true)
+        .AddChoice(false)
+        .DefaultValue(true)
+        .DefaultValueStyle(Color.Blue)
+        .WithConverter(choice => choice ? "Y" : "n"));
+
+    if (confirmation)
+    {
+        DemoData.generate(bank.Transactions, bank);
+    }
+}
+else
+{
+    AnsiConsole.MarkupLine($"[blue]Transactions data loaded:[/] {sizeOfData} [blue]bytes[/]");
+}
 
 //DemoData.generate(bank.Transactions, bank);
 
