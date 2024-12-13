@@ -127,7 +127,16 @@ public class ConsoleHelper
                 item.Message
                 );
         }
-        table.Caption("[grey]You have currently[/] [white]" + accountSummary.ToString("C") + "[/][grey] on your account.[/]");
+        if (accountSummary > 0)
+        {
+            table.Caption("[grey]You currently have[/] [green]" + accountSummary.ToString("C") + "[/][grey] on your account[/]");
+        }
+        else
+        {
+            table.Caption("[grey]You currently have[/] [red]" + accountSummary.ToString("C") + "[/][grey] on your account[/]");
+
+        }
+
         AnsiConsole.Write(table);
 
     }
