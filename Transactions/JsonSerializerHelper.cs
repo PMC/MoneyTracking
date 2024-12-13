@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.Json;
 
 namespace MoneyTracking.Transactions;
@@ -6,10 +5,7 @@ public static class JsonSerializerHelper
 {
     public static string GetFullPathToJsonFile(string fileName)
     {
-        // Get the path to the executing assembly (your program)
-        var appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var dataPath = Path.Combine(appPath, "Data");
-
+        var dataPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
         // Create data directory if needed
         if (!Directory.Exists(dataPath))
         {
