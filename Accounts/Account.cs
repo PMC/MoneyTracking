@@ -10,7 +10,7 @@ public abstract class Account
     public List<Transaction> Transactions { get; set; } = [];
 
 
-    public enum SORTORDER { DATE, AMOUNT, POSITIVE_AMOUNT, MESSAGE }
+    public enum SORTORDER { DATE, AMOUNT, DEPOSIT, MESSAGE, WITHDRAW }
 
     public SORTORDER SortOrder { get; set; }
 

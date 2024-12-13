@@ -30,6 +30,7 @@ public class ConsoleHelper
         var toDelete = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<Transaction>()
                     .PageSize(Console.WindowHeight - 3)
+                    .WrapAround()
                     .Title("[blue]MultiSelect Transactions to REMOVE[/]")
                     .MoreChoicesText("[grey](Move up and down to reveal more...[/]")
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a Transaction, [green]<enter>[/] to accept)[/]")
@@ -96,8 +97,11 @@ public class ConsoleHelper
             case Account.SORTORDER.AMOUNT:
                 sortOrder = TransactionExtensions.SortByAmount(bank.Transactions);
                 break;
-            case Account.SORTORDER.POSITIVE_AMOUNT:
+            case Account.SORTORDER.DEPOSIT:
                 sortOrder = TransactionExtensions.FilterByPositiveAmount(bank.Transactions);
+                break;
+            case Account.SORTORDER.WITHDRAW:
+                sortOrder = TransactionExtensions.FilterByNegativeAmount(bank.Transactions);
                 break;
             case Account.SORTORDER.MESSAGE:
                 sortOrder = TransactionExtensions.SortByMessage(bank.Transactions);
@@ -203,7 +207,8 @@ public class ConsoleHelper
         choices.Add("Transaction Date", Account.SORTORDER.DATE);
         choices.Add("Transaction Message", Account.SORTORDER.MESSAGE);
         choices.Add("Amount", Account.SORTORDER.AMOUNT);
-        choices.Add("Only Positive Amount", Account.SORTORDER.POSITIVE_AMOUNT);
+        choices.Add("Only Deposit", Account.SORTORDER.DEPOSIT);
+        choices.Add("Only Withdraw", Account.SORTORDER.WITHDRAW);
 
 
         var sortOrder = AnsiConsole.Prompt(
