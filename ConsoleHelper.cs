@@ -31,6 +31,7 @@ public class ConsoleHelper
                 new MultiSelectionPrompt<Transaction>()
                     .PageSize(Console.WindowHeight - 3)
                     .WrapAround()
+                    .NotRequired()
                     .Title("[blue]MultiSelect Transactions to REMOVE[/]")
                     .MoreChoicesText("[grey](Move up and down to reveal more...[/]")
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a Transaction, [green]<enter>[/] to accept)[/]")
@@ -212,14 +213,14 @@ public class ConsoleHelper
 
 
         var sortOrder = AnsiConsole.Prompt(
-    new SelectionPrompt<string>()
+        new SelectionPrompt<string>()
         .Title("[green]Select sorting[/] [blue]ORDER[/]")
         .PageSize(10)
         .WrapAround()
         .MoreChoicesText("[grey](Move up and down to reveal more)[/]")
         .AddChoices(choices.Select(x => x.Key)
                    .ToArray()
-    ));
+        ));
 
         bank.SortOrder = choices.GetValueOrDefault(sortOrder);
     }
