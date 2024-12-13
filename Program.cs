@@ -23,11 +23,13 @@ bool keepRunning = true;
 Account bank = BankAccountBuilder.Empty()
     .WithName("SWEDBANK")
     .Build();
+DemoData.generate(bank.Transactions, bank);
 
-DemoData.generate(bank.Transactions, bank);
-DemoData.generate(bank.Transactions, bank);
-DemoData.generate(bank.Transactions, bank);
-DemoData.generate(bank.Transactions, bank);
+var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+
+JsonSerializerHelper.SerializeToFile(file, bank.Transactions);
+
+
 
 
 while (keepRunning)
@@ -127,7 +129,7 @@ static Table renderTable(Account bank)
     Table table = new Table()
         .Border(TableBorder.Rounded)
         .BorderColor(Color.Blue)
-        .Caption($"Transaction History for: {bank.AccountName}")
+        .Caption($"Transaction History for {bank.AccountName}")
         .AddColumn(new TableColumn("[grey]Date[/]").PadRight(RIGHT))
         .AddColumn(new TableColumn("[grey]Type[/]").PadRight(RIGHT))
         .AddColumn(new TableColumn("[grey]Amount[/]").RightAligned().PadLeft(RIGHT))
