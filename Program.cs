@@ -56,6 +56,10 @@ while (keepRunning)
         case MENUCHOICES.NEW:
             ConsoleHelper.CreateNewTransaction(bank);
             break;
+        case MENUCHOICES.SORT:
+            ConsoleHelper.AskSortingOrder(bank);
+            break;
+
     }
 
 }

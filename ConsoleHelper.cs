@@ -163,4 +163,17 @@ public class ConsoleHelper
         }
 
     }
+
+    public static void AskSortingOrder(Account bank)
+    {
+        var sortOrder = AnsiConsole.Prompt(
+    new SelectionPrompt<string>()
+        .Title("[green]Select sorting[/] [blue]ORDER[/]")
+        .PageSize(10)
+        .MoreChoicesText("[grey](Move up and down to reveal more)[/]")
+        .AddChoices(new[] {
+            "Transaction Date", "Amount", "Only Positive Amount",
+            "Transaction Message",
+        }));
+    }
 }
