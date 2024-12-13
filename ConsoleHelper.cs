@@ -121,12 +121,10 @@ public class ConsoleHelper
 
         foreach (var item in sortOrder)
         {
-            table.AddRow(item.TransactionDate.ToString("MMM dd"),
+            table.AddRow(item.TransactionDate.ToShortDateString(),
                 item.Type.ToString(),
                 item.Amount.ToString("C"),
                 item.Message
-
-
                 );
         }
         return table;
