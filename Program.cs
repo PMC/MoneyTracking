@@ -41,7 +41,7 @@ Console.ReadLine();
 while (keepRunning)
 {
     //AnsiConsole.Clear();
-    AnsiConsole.Write(ConsoleHelper.RenderTable(bank));
+    ConsoleHelper.RenderTable(bank);
     AnsiConsole.WriteLine();
 
     var prompt = ConsoleHelper.DisplayMenu(options);

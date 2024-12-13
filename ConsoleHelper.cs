@@ -84,7 +84,7 @@ public class ConsoleHelper
     }
 
 
-    public static Table RenderTable(Account bank)
+    public static void RenderTable(Account bank)
     {
         Span<Transaction> sortOrder;
 
@@ -112,22 +112,24 @@ public class ConsoleHelper
         Table table = new Table()
             .Border(TableBorder.Rounded)
             .BorderColor(Color.Blue)
-            .Caption($"Transaction History for {bank.AccountName}")
             .AddColumn(new TableColumn("[grey]Date[/]").PadRight(RIGHT))
             .AddColumn(new TableColumn("[grey]Type[/]").PadRight(RIGHT))
             .AddColumn(new TableColumn("[grey]Amount[/]").RightAligned().PadLeft(RIGHT))
             .AddColumn(new TableColumn("[grey]Transaction Message[/]").PadRight(RIGHT))
             ;
-
+        decimal accountSummary = 0M;
         foreach (var item in sortOrder)
         {
+            accountSummary += item.Amount;
             table.AddRow(item.TransactionDate.ToShortDateString(),
                 item.Type.ToString(),
                 item.Amount.ToString("C"),
                 item.Message
                 );
         }
-        return table;
+        table.Caption("[grey]You have currently[/] [white]" + accountSummary.ToString("C") + "[/][grey] on your account.[/]");
+        AnsiConsole.Write(table);
+
     }
 
     public static string DisplayMenu(string[] choices)
