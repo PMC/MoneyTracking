@@ -17,4 +17,9 @@ public static class TransactionExtensions
         return transactions.ToArray().Where(t => t.Amount > 0).ToArray().AsSpan();
     }
 
+    public static Span<Transaction> SortByMessage(List<Transaction> transactions)
+    {
+        return transactions.ToArray().OrderBy(t => t.Message).ToArray().AsSpan();
+    }
+
 }

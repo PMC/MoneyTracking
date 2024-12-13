@@ -25,20 +25,21 @@ public class ConsoleHelper
             .Color(Color.DeepSkyBlue3_1));
     }
 
-    public static void AskMultiSelection(Span<Transaction> sortedSpan)
+    public static void AskMultiSelection(Account account)
     {
-        var favorites = AnsiConsole.Prompt(
+        var toDelete = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<Transaction>()
-                    .PageSize(10)
-                    .Title("[blue]MultiSelect Transactions to delete[/]")
+                    .PageSize(Console.WindowHeight - 3)
+                    .Title("[blue]MultiSelect Transactions to REMOVE[/]")
                     .MoreChoicesText("[grey](Move up and down to reveal more...[/]")
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a Transaction, [green]<enter>[/] to accept)[/]")
 
-                    .AddChoices(sortedSpan.ToArray()));
+                    .AddChoices(account.Transactions));
 
-        foreach (var t in favorites)
+        foreach (var t in toDelete)
         {
-            AnsiConsole.WriteLine(t.TransactionId.ToString());
+            account.Transactions.Remove(t);
+            AnsiConsole.MarkupLine("[red]Removing Record with TransactionID: [/]" + t.TransactionId.ToString());
         }
     }
 
@@ -85,6 +86,28 @@ public class ConsoleHelper
 
     public static Table RenderTable(Account bank)
     {
+        Span<Transaction> sortOrder;
+
+        switch (bank.SortOrder)
+        {
+            case Account.SORTORDER.DATE:
+                sortOrder = TransactionExtensions.SortByDate(bank.Transactions);
+                break;
+            case Account.SORTORDER.AMOUNT:
+                sortOrder = TransactionExtensions.SortByAmount(bank.Transactions);
+                break;
+            case Account.SORTORDER.POSITIVE_AMOUNT:
+                sortOrder = TransactionExtensions.FilterByPositiveAmount(bank.Transactions);
+                break;
+            case Account.SORTORDER.MESSAGE:
+                sortOrder = TransactionExtensions.SortByMessage(bank.Transactions);
+                break;
+            default:
+                sortOrder = TransactionExtensions.SortByDate(bank.Transactions);
+                break;
+
+        }
+
         // Create a table
         Table table = new Table()
             .Border(TableBorder.Rounded)
@@ -96,7 +119,7 @@ public class ConsoleHelper
             .AddColumn(new TableColumn("[grey]Transaction Message[/]").PadRight(RIGHT))
             ;
 
-        foreach (var item in TransactionExtensions.SortByDate(bank.Transactions))
+        foreach (var item in sortOrder)
         {
             table.AddRow(item.TransactionDate.ToString("MMM dd"),
                 item.Type.ToString(),
@@ -114,6 +137,7 @@ public class ConsoleHelper
         return AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Select and option:")
+                .WrapAround()
                 .AddChoices(choices));
     }
 
@@ -166,14 +190,25 @@ public class ConsoleHelper
 
     public static void AskSortingOrder(Account bank)
     {
+        Dictionary<string, Account.SORTORDER> choices = new Dictionary<string, Account.SORTORDER>();
+        choices.Add("Transaction Date", Account.SORTORDER.DATE);
+        choices.Add("Transaction Message", Account.SORTORDER.MESSAGE);
+        choices.Add("Amount", Account.SORTORDER.AMOUNT);
+        choices.Add("Only Positive Amount", Account.SORTORDER.POSITIVE_AMOUNT);
+
+
         var sortOrder = AnsiConsole.Prompt(
     new SelectionPrompt<string>()
         .Title("[green]Select sorting[/] [blue]ORDER[/]")
         .PageSize(10)
+        .WrapAround()
         .MoreChoicesText("[grey](Move up and down to reveal more)[/]")
-        .AddChoices(new[] {
-            "Transaction Date", "Amount", "Only Positive Amount",
-            "Transaction Message",
-        }));
+        .AddChoices(choices.Select(x => x.Key)
+                   .ToArray()
+    ));
+
+        bank.SortOrder = choices.GetValueOrDefault(sortOrder);
     }
+
+
 }

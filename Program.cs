@@ -2,7 +2,6 @@
 using System.Text;
 using MoneyTracking;
 using MoneyTracking.Accounts;
-using MoneyTracking.Transactions;
 using Spectre.Console;
 
 Console.OutputEncoding = Encoding.Unicode;
@@ -13,8 +12,7 @@ choices.Add("Delete Records", MENUCHOICES.EDIT);
 choices.Add("Sort Options", MENUCHOICES.SORT);
 choices.Add("Save and Quit", MENUCHOICES.SAVEANDQUIT);
 
-var options = choices.Select(x => x.Key)
-                   .ToArray();
+var options = choices.Select(x => x.Key).ToArray();
 
 bool keepRunning = true;
 
@@ -37,6 +35,8 @@ else
     AnsiConsole.MarkupLine($"[blue]Transactions data loaded:[/] {sizeOfData} [blue]bytes[/]\n");
 }
 
+AnsiConsole.Markup("Press enter to continue....");
+Console.ReadLine();
 
 while (keepRunning)
 {
@@ -51,7 +51,7 @@ while (keepRunning)
             bank.SaveToFile();
             keepRunning = false; break;
         case MENUCHOICES.EDIT:
-            ConsoleHelper.AskMultiSelection(TransactionExtensions.SortByDate(bank.Transactions));
+            ConsoleHelper.AskMultiSelection(bank);
             break;
         case MENUCHOICES.NEW:
             ConsoleHelper.CreateNewTransaction(bank);
