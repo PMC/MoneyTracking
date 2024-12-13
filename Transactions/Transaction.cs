@@ -13,6 +13,11 @@ public class Transaction : IComparable
         Transaction t = obj as Transaction;
         return TransactionDate.CompareTo(t.TransactionDate);
     }
+
+    public override string? ToString()
+    {
+        return $"{TransactionDate.ToShortDateString()}; {Amount}: {Message}";
+    }
 }
 public enum TransactionType
 {
