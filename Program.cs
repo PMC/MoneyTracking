@@ -19,6 +19,10 @@ var options = choices.Select(x => x.Key)
 
 bool keepRunning = true;
 
+
+ConsoleHelper.DisplayMoneyTrackerLogoOther();
+
+
 // Initialize account with salary deposit
 Account bank = BankAccountBuilder.Empty()
     .WithName("SWEDBANK")
@@ -42,15 +46,8 @@ if (sizeOfData == -1 || bank.Transactions.Count == 0)
 }
 else
 {
-    AnsiConsole.MarkupLine($"[blue]Transactions data loaded:[/] {sizeOfData} [blue]bytes[/]");
+    AnsiConsole.MarkupLine($"[blue]Transactions data loaded:[/] {sizeOfData} [blue]bytes[/]\n");
 }
-
-//DemoData.generate(bank.Transactions, bank);
-
-
-//JsonSerializerHelper.SerializeToFile(file, bank.Transactions);
-
-
 
 
 while (keepRunning)
@@ -158,7 +155,7 @@ static Table renderTable(Account bank)
         .AddColumn(new TableColumn("[grey]Transaction Message[/]").PadRight(RIGHT))
         ;
 
-    foreach (var item in bank.Transactions)
+    foreach (var item in TransactionExtensions.SortByDate(bank.Transactions))
     {
         table.AddRow(item.TransactionDate.ToString("MMM dd"),
             item.Type.ToString(),
@@ -178,3 +175,4 @@ static string displayMenu(string[] choices)
             .Title("Select and option:")
             .AddChoices(choices));
 }
+
