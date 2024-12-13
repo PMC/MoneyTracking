@@ -9,6 +9,11 @@ public abstract class Account
     public string? AccountType { get; protected set; }
     public List<Transaction> Transactions { get; set; } = [];
 
+
+    public enum SORTORDER { DATE, AMOUNT, POSITIVE_AMOUNT, MESSAGE }
+
+    public SORTORDER SortOrder { get; set; }
+
     public virtual void Deposit(decimal amount)
     {
         if (amount > 0)
