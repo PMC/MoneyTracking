@@ -7,7 +7,7 @@ public abstract class Account
     public string AccountName { get; protected set; }
     public string? TransactionFile { get; protected set; }
     public string? AccountType { get; protected set; }
-    public List<Transaction> Transactions { get; protected set; } = [];
+    public List<Transaction> Transactions { get; set; } = [];
 
     public virtual void Deposit(decimal amount)
     {
@@ -34,5 +34,22 @@ public abstract class Account
         AccountID = Guid.NewGuid();
         AccountName = accountName;
         TransactionFile = accountName;
+    }
+
+    public void SaveToFile()
+    {
+        var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+        JsonSerializerHelper.SerializeToFile(file, Transactions);
+    }
+
+    public void LoadFromFile()
+    {
+        var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+
+        if (File.Exists(file))
+        {
+            string jsonData = File.ReadAllText(file);
+            Transactions = JsonSerializerHelper.Deserialize<List<Transaction>>(jsonData);
+        }
     }
 }

@@ -1,6 +1,5 @@
 // See https://aka.ms/new-console-template for more information
 using System.Text;
-using MoneyTracking;
 using MoneyTracking.Accounts;
 using MoneyTracking.Transactions;
 using Spectre.Console;
@@ -23,11 +22,13 @@ bool keepRunning = true;
 Account bank = BankAccountBuilder.Empty()
     .WithName("SWEDBANK")
     .Build();
-DemoData.generate(bank.Transactions, bank);
 
-var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+bank.LoadFromFile();
 
-JsonSerializerHelper.SerializeToFile(file, bank.Transactions);
+//DemoData.generate(bank.Transactions, bank);
+
+
+//JsonSerializerHelper.SerializeToFile(file, bank.Transactions);
 
 
 
@@ -42,6 +43,7 @@ while (keepRunning)
     switch (choices.GetValueOrDefault(prompt))
     {
         case MENUCHOICES.SAVEANDQUIT:
+            bank.SaveToFile();
             keepRunning = false; break;
         case MENUCHOICES.SHOW:
             break;
