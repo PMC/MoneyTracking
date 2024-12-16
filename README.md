@@ -9,7 +9,8 @@ This is a project that aims to create a user-friendly money tracking application
 - Record transactions: Users can log daily expenses, deposits, or withdrawals.
 - Categorize expenses: Transactions can be categorized based on type (e.g., groceries, entertainment, bills).
 - Analyze spending patterns: The program provides insights into where the user's money is going, helping them make informed financial decisions.
-- 
+
+  
 **Functionality**
 
 *   **AbstractAccountBuilder.cs**: This class serves as a base for all account builders. It provides methods for setting an account name, account ID, and building the final account object.
