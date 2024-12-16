@@ -86,29 +86,29 @@ public class ConsoleHelper
     }
 
 
-    public static void RenderTable(Account bank)
+    public static void RenderTable(Account account)
     {
         Span<Transaction> sortOrder;
 
-        switch (bank.SortOrder)
+        switch (account.SortOrder)
         {
             case Account.SORTORDER.DATE:
-                sortOrder = TransactionExtensions.SortByDate(bank.Transactions);
+                sortOrder = TransactionExtensions.SortByDate(account.Transactions);
                 break;
             case Account.SORTORDER.AMOUNT:
-                sortOrder = TransactionExtensions.SortByAmount(bank.Transactions);
+                sortOrder = TransactionExtensions.SortByAmount(account.Transactions);
                 break;
             case Account.SORTORDER.DEPOSIT:
-                sortOrder = TransactionExtensions.FilterByPositiveAmount(bank.Transactions);
+                sortOrder = TransactionExtensions.FilterByPositiveAmount(account.Transactions);
                 break;
             case Account.SORTORDER.WITHDRAW:
-                sortOrder = TransactionExtensions.FilterByNegativeAmount(bank.Transactions);
+                sortOrder = TransactionExtensions.FilterByNegativeAmount(account.Transactions);
                 break;
             case Account.SORTORDER.MESSAGE:
-                sortOrder = TransactionExtensions.SortByMessage(bank.Transactions);
+                sortOrder = TransactionExtensions.SortByMessage(account.Transactions);
                 break;
             default:
-                sortOrder = TransactionExtensions.SortByDate(bank.Transactions);
+                sortOrder = TransactionExtensions.SortByDate(account.Transactions);
                 break;
 
         }
@@ -127,34 +127,84 @@ public class ConsoleHelper
         {
             accountSummary += item.Amount;
             table.AddRow(item.TransactionDate.ToShortDateString(),
-                item.Type.ToString(),
+                DisplayTransactionType(item, account),
                 item.Amount.ToString("C"),
                 item.Message
                 );
         }
-        if (accountSummary > 0)
-        {
-            table.Caption("[grey]You currently have[/] [green]" + accountSummary.ToString("C") + "[/][grey] on your account[/]");
-        }
-        else
-        {
-            table.Caption("[grey]You currently have[/] [red]" + accountSummary.ToString("C") + "[/][grey] on your account[/]");
-
-        }
-
+        table.Caption(DisplayTableCaption(account, accountSummary));
+        table.Title("[bold]Transaction list for:[/][green] " + account.AccountName + "[/]");
         AnsiConsole.Write(table);
 
     }
 
-    public static string DisplayMenu(string[] choices)
+    private static string DisplayTableCaption(Account account, decimal accountSummary)
+    {
+        if (account.AccountType == "Bank")
+        {
+            if (accountSummary > 0)
+            {
+                return "[grey]You currently have[/] [green]" + accountSummary.ToString("C") + "[/][grey] on your account[/]";
+            }
+            else
+            {
+                return "[grey]You currently have[/] [red]" + accountSummary.ToString("C") + "[/][grey] on your account[/]";
+            }
+        }
+        else
+        {
+            if (accountSummary > 0)
+            {
+                return $"[red]You owe {account.AccountName}: " + accountSummary.ToString("C") + "[/]";
+            }
+            else
+            {
+                return $"[grey]{account.AccountName} owes you[/]:[green] " + accountSummary.ToString("C") + "[/]";
+            }
+        }
+
+
+    }
+
+    private static string DisplayTransactionType(Transaction item, Account account)
+    {
+        if (account.AccountType == "Bank")
+        {
+            return item.Type.ToString();
+        }
+
+        if (item.Type == TransactionType.Deposit)
+        {
+            return "Payback";
+        }
+        else
+        {
+            return "Loan";
+        }
+    }
+
+    public static string DisplayMainMenu(string[] choices)
     {
         return AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Select and option:")
+                .Title("Select an option:")
                 .WrapAround()
                 .AddChoices(choices));
     }
-
+    public static AccountStruct SelectAccountToLoad(AccountStruct[] choices)
+    {
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<AccountStruct>()
+                .Title("Select Account to load:")
+                .WrapAround()
+                .AddChoices(choices)
+                .AddChoices(new AccountStruct
+                {
+                    AccountID = Guid.NewGuid(),
+                    AccountName = "*NEW ACCOUNT*",
+                })
+                );
+    }
     public static void CreateNewTransaction(Account account)
     {
         string message;
@@ -170,17 +220,39 @@ public class ConsoleHelper
 
         if (type == TransactionType.Withdraw)
         {
-            message = AnsiConsole.Prompt(new TextPrompt<string>("Payment to?: ")
-                .DefaultValueStyle(Color.Blue)
-                .DefaultValue($"BankOMat utag: {account.AccountName}"));
-            amount = 200M;
+            if (account.AccountType == "Bank")
+            {
+                message = AnsiConsole.Prompt(new TextPrompt<string>("Payment to?: ")
+                    .DefaultValueStyle(Color.Blue)
+                    .DefaultValue($"BankOMat utag: {account.AccountName}"));
+                amount = 200M;
+            }
+            else
+            {
+                message = AnsiConsole.Prompt(new TextPrompt<string>("Message: ")
+                    .DefaultValueStyle(Color.Blue)
+                    .DefaultValue($"Loan"));
+                amount = 200M;
+            }
         }
         else
         {
-            message = AnsiConsole.Prompt(new TextPrompt<string>("Deposit from who?: ")
-                .DefaultValueStyle(Color.Blue)
-                .DefaultValue("Salary"));
-            amount = 12000M;
+            if (account.AccountType == "Bank")
+            {
+
+                message = AnsiConsole.Prompt(new TextPrompt<string>("Deposit from who?: ")
+                    .DefaultValueStyle(Color.Blue)
+                    .DefaultValue("Salary"));
+                amount = 12000M;
+            }
+            else
+            {
+                message = AnsiConsole.Prompt(new TextPrompt<string>("Message: ")
+                    .DefaultValueStyle(Color.Blue)
+                    .DefaultValue("Payback"));
+                amount = 500;
+
+            }
         }
 
         amount = AnsiConsole.Prompt(new TextPrompt<decimal>("Amount?: ")
@@ -225,5 +297,97 @@ public class ConsoleHelper
         bank.SortOrder = choices.GetValueOrDefault(sortOrder);
     }
 
+    internal static string AskForAccountType()
+    {
+        AnsiConsole.MarkupLine("Bank Account is for displaying transactions against a Bank");
+        AnsiConsole.MarkupLine("Person Account is for keeping track of Loans and Paybacks towards one person\n");
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Select Account Type:")
+                .WrapAround()
+                .AddChoices("Person")
+                .AddChoices("Bank")
+                );
+    }
 
+    internal static string AskForAccountName(string defaultName)
+    {
+        return AnsiConsole.Prompt(new TextPrompt<string>("Please enter an Account name: ")
+            .DefaultValueStyle(Color.Blue)
+            .DefaultValue(defaultName));
+    }
+
+    public static Account DisplayAccountSelection()
+    {
+        AccountList accountList = new AccountList();
+        Account bank = null;
+        AccountStruct? selection = null;
+
+        // loading Account data
+        AnsiConsole.Markup($"[blue]Loading Account data... [/]");
+        int accountListSize = accountList.load();
+
+        if (accountListSize != -1)
+        {
+            AnsiConsole.MarkupLine($"{accountListSize} [blue]bytes loaded[/]");
+            selection = ConsoleHelper.SelectAccountToLoad(accountList.Accounts.ToArray());
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[white]No data found![/]");
+        }
+
+        if (accountListSize == -1 || selection?.AccountName == "*NEW ACCOUNT*")
+        {
+            string type = ConsoleHelper.AskForAccountType();
+            string name;
+            if (type == "Bank")
+            {
+                name = ConsoleHelper.AskForAccountName("SWEDBANK");
+                bank = BankAccountBuilder.Empty()
+                    .WithName(name)
+                    .Build();
+            }
+            else
+            {
+                name = ConsoleHelper.AskForAccountName("John Doe");
+                bank = PersonAccountBuilder.Empty()
+                    .WithName(name)
+                    .Build();
+            }
+            accountList.AddNew(bank);
+        }
+        else
+        {
+            if (selection.AccountType == "Bank")
+            {
+                bank = BankAccountBuilder.Empty()
+                    .WithName(selection.AccountName)
+                    .WithAccountID(selection.AccountID)
+                    .Build();
+            }
+            else
+            {
+                bank = PersonAccountBuilder.Empty()
+                    .WithName(selection.AccountName)
+                    .WithAccountID(selection.AccountID)
+                    .Build();
+            }
+        }
+
+        accountList.save();
+
+        //load transactions
+        var sizeOfData = bank.LoadFromFile();
+        if (sizeOfData == -1 || bank.Transactions.Count == 0)
+        {
+            ConsoleHelper.AskIfUserWantDemoData(bank);
+        }
+        else
+        {
+            AnsiConsole.MarkupLine($"[blue]Loading Transaction data... [/]{sizeOfData} [blue]bytes loaded[/]\n");
+        }
+
+        return bank;
+    }
 }

@@ -5,10 +5,9 @@ public abstract class Account
     public Guid AccountID { get; protected set; }
     public decimal Balance { get; protected set; } = 0;
     public string AccountName { get; protected set; }
-    public string? TransactionFile { get; protected set; }
-    public string? AccountType { get; protected set; }
+    public string TransactionFile { get; protected set; }
+    public string AccountType { get; protected set; }
     public List<Transaction> Transactions { get; set; } = [];
-
 
     public enum SORTORDER { DATE, AMOUNT, DEPOSIT, MESSAGE, WITHDRAW }
 
@@ -32,19 +31,19 @@ public abstract class Account
     {
         AccountID = accountID;
         AccountName = accountName;
-        TransactionFile = accountName;
+        TransactionFile = accountID.GetHashCode().ToString() + ".json";
     }
     protected Account(string accountName)
     {
         AccountID = Guid.NewGuid();
         AccountName = accountName;
-        TransactionFile = accountName;
+        TransactionFile = AccountID.GetHashCode().ToString() + ".json";
     }
 
     public void SaveToFile()
     {
         //var file = JsonSerializerHelper.GetFullPathToJsonFile($"{AccountID.GetHashCode()}.json");
-        var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+        var file = JsonSerializerHelper.GetFullPathToJsonFile(TransactionFile);
         JsonSerializerHelper.SerializeToFile(file, Transactions);
     }
 
@@ -53,7 +52,7 @@ public abstract class Account
      */
     public int LoadFromFile()
     {
-        var file = JsonSerializerHelper.GetFullPathToJsonFile("transactions.json");
+        var file = JsonSerializerHelper.GetFullPathToJsonFile(TransactionFile);
 
         if (File.Exists(file))
         {

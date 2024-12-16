@@ -1,325 +1,41 @@
- # Money Tracker
+# Money Tracker
 
-## Overview
+## Introduction
 
-Money Tracking is an open source application, 640KB in size, designed using .NET 5.0 technology stack to help you manage your transactions and account book.
-
-## Getting Started
-
-- To run the project locally, clone it from the repository and restore NuGet packages:
-  ```
-  git clone https://github.com/moneytracking/MoneyTracking.git
-  cd MoneyTracking
-  dotnet restore
-  ```
-- For more information about using .NET, see [here](https://docs.microsoft.com/en-us/dotnet/)
+This is a project that aims to create a user-friendly money tracking application. The program allows users to manage their finances by recording transactions, categorizing expenses.
 
 ## Features
 
-- Manage transactions by adding, removing and displaying the records
-- Customisable logos for Money Tracker
-- Support for multiple selection of transactions for removal
+- Record transactions: Users can log daily expenses, deposits, or withdrawals.
+- Categorize expenses: Transactions can be categorized based on type (e.g., groceries, entertainment, bills).
+- Analyze spending patterns: The program provides insights into where the user's money is going, helping them make informed financial decisions.
 
-## Usage
+  
+**Functionality**
 
-### 1. Add Transactions
+*   **AbstractAccountBuilder.cs**: This class serves as a base for all account builders. It provides methods for setting an account name, account ID, and building the final account object.
+*   **BankAccountBuilder.cs**: This class inherits from `AbstractAccountBuilder` and overrides the `Build()` method to create a bank account. It also provides a static method `Empty()` to create a new instance of the builder.
+*   **PersonAccountBuilder.cs**: Similar to `BankAccountBuilder`, this class creates a person account by overriding the `Build()` method. This account type is meant to track loans, eg a person is loaning money from you.
+*   **TransactionBuilder.cs**: This class demonstrates how to build transactions using the Builder pattern. It allows setting an account ID, transaction date, and building the final transaction object.
 
-You can add a transaction by creating a new instance of the `Transaction` class in the main method or in the `ConsoleHelper.AskMultiSelection()` method.
+**Builder Pattern**
 
-- In the main method:
-  ```
-  var account = new Account();
-  var transaction1 = new Transaction("Personal", "2023-05-17", 100, "Grocery", account);
-  account.Transactions.Add(transaction1);
-  ```
-- In the `ConsoleHelper.AskMultiSelection()` method:
-  ```
-  public static void AskMultiSelection(Account account)
-  {
-  //...
-  }
-  var transaction2 = new Transaction("Personal", "2023-05-18", 50, "Gasoline", account);
-  account.Transactions.Add(transaction2);
-  ```
+The Builder pattern is used extensively throughout the program. It separates the construction of a complex object from its representation, allowing for more flexibility and easier maintenance.
 
-### 2. Remove Transactions
+*   **Step-by-Step Construction**: The builder classes provide methods to set individual properties (e.g., account name, ID) in a step-by-step manner.
+*   **Fluent Interface**: The builders use a fluent interface to allow chaining method calls, making the code more readable and concise.
+*   **Final Product**: The `Build()` method returns the final constructed object.
 
-Use the `ConsoleHelper.AskMultiSelection()` method to remove transactions from a specific account:
+## How to Use
 
-```
-var account = new Account();
-//...
-ConsoleHelper.AskMultiSelection(account);
-```
+To use this project, clone it from the GitHub repository and follow the installation instructions provided in the README.md file.
 
-## Logos
+## Installation
 
-- Display Money Tracker logo:
-  ```
-  ConsoleHelper.DisplayMoneyTrackerLogo()
-  ```
-- Display Money Tracker logo with cricket font:
-  ```
-  ConsoleHelper.DisplayMoneyTrackerLogoOther()
-  ```
+1. Clone the repository: `git clone https://github.com/PMC/MoneyTracker.git`
+2. Navigate to the project directory: `cd MoneyTracker`
+3. Install dependencies using dotnet CLI: `dotnet restore`
 
-### Troubleshooting
+After installing the necessary dependencies, you can run the program from the command line using `dotnet run`.
 
-If you encounter any issues, please report them on the issue tracking system in our repository.
 
-[source_id]Taken from TransactionBuilder.cs and ConsoleHelper.cs files[/] # Money Tracker
-
-## Overview
-
-Money Tracking is an open source application designed using .NET 5.0 technology stack to help you manage your transactions and account book. The program is approximately 640KB in size.
-
-## Getting Started
-
-To run the project locally, follow these steps:
-
-1. Clone it from the repository: `git clone https://github.com/moneytracking/MoneyTracking.git`
-2. Navigate to the project directory: `cd MoneyTracking`
-3. Restore NuGet packages: `dotnet restore`
-
-For more information about using .NET, see [here](https://docs.microsoft.com/en-us/dotnet/).
-
-## Features
-
-- Manage transactions by adding, removing and displaying the records
-- Customisable logos for Money Tracker
-- Support for multiple selection of transactions for removal
-
-## Usage
-
-### 1. Add Transactions
-
-You can add a transaction by creating a new instance of the `Transaction` class in the main method or in the `ConsoleHelper.AskMultiSelection()` method.
-
-- In the main method:
-  ```csharp
-  var account = new Account();
-  var transaction1 = new Transaction("Personal", "2023-05-17", 100, "Grocery", account);
-  account.Transactions.Add(transaction1);
-  ```
-- In the `ConsoleHelper.AskMultiSelection()` method:
-  ```csharp
-  var transaction2 = new Transaction("Personal", "2023-05-18", 50, "Gasoline", account);
-  account.Transactions.Add(transaction2);
-  ```
-
-### 2. Remove Transactions
-
-Use the `ConsoleHelper.AskMultiSelection()` method to remove transactions from a specific account:
-
-```csharp
-var account = new Account();
-//...
-ConsoleHelper.AskMultiSelection(account);
-```
-
-## Logos
-
-- Display Money Tracker logo:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogo();
-  ```
-- Display Money Tracker logo with cricket font:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogoOther();
-  ```
-
-### Troubleshooting
-
-If you encounter any issues, please report them on the issue tracking system in our repository.
-
-[//] # Money Tracker
-
-## Overview
-
-moneytracking is an open source application designed using .NET 5.0 technology stack to help you manage your transactions and account book. The program is approximately 640 KB in size.
-
-## Getting Started
-
-To run the project locally, follow these steps:
-
-1. Clone it from the repository: `git clone https://github.com/moneytracking/MoneyTracking.git`
-2. Navigate to the project directory: `cd MoneyTracking`
-3. Restore NuGet packages: `dotnet restore`
-
-For more information about using .NET, see [here](https://docs.microsoft.com/en-us/dotnet/).
-
-## Features
-
-- Manage transactions by adding, removing and displaying the records
-- Customisable logos for Money Tracker
-- Support for multiple selection of transactions for removal
-
-## Usage
-
-### 1. Add Transactions
-
-You can add a transaction by creating a new instance of the `Transaction` class in the main method or in the `ConsoleHelper.AskMultiSelection()` method.
-
-- In the main method:
-  ```csharp
-  var account = new Account();
-  var transaction1 = new Transaction("Personal", "2023-05-17", 100, "Grocery", account);
-  account.Transactions.Add(transaction1);
-  ```
-- In the `ConsoleHelper.AskMultiSelection()` method:
-  ```csharp
-  var transaction2 = new Transaction("Personal", "2023-05-18", 50, "Gasoline", account);
-  account.Transactions.Add(transaction2);
-  ```
-
-### 2. Remove Transactions
-
-Use the `ConsoleHelper.AskMultiSelection()` method to remove transactions from a specific account:
-
-```csharp
-var account = new Account();
-//...
-ConsoleHelper.AskMultiSelection(account);
-```
-
-## Logos
-
-- Display Money Tracker logo:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogo();
-  ```
-- Display Money Tracker logo with cricket font:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogoOther();
-  ```
-
-### Troubleshooting
-
-If you encounter any issues, please report them on the issue tracking system in our repository.
-
-[//] # Money Tracker
-
-## Overview
-
-moneytracking is an open source application designed using .NET 5.0 technology stack to help you manage your transactions and account book. The program is approximately 640 KB in size.
-
-## Getting started
-
-To run the project locally, follow these steps:
-
-1. Clone it from the repository: `git clone https://github.com/moneytracking/MoneyTracking.git`
-2. Navigate to the project directory: `cd MoneyTracking`
-3. Restore NuGet packages: `dotnet restore`
-
-For more information about using .NET, see [here](https://docs.microsoft.com/en-us/dotnet/).
-
-## Features
-
-- Manage transactions by adding, removing and displaying the records
-- Customisable logos for Money Tracker
-- Support for multiple selection of transactions for removal
-
-## Usage
-
-### 1. Add Transactions
-
-You can add a transaction by creating a new instance of the `Transaction` class in the main method or in the `ConsoleHelper.AskMultiSelection()` method.
-
-- In the main method:
-  ```csharp
-  var account = new Account();
-  var transaction1 = new Transaction("Personal", "2023-05-17", 100, "Grocery", account);
-  account.Transactions.Add(transaction1);
-  ```
-- In the `ConsoleHelper.AskMultiSelection()` method:
-  ```csharp
-  var transaction2 = new Transaction("Personal", "2023-05-18", 50, "Gasoline", account);
-  account.Transactions.Add(transaction2);
-  ```
-
-### 2. Remove Transactions
-
-Use the `ConsoleHelper.AskMultiSelection()` method to remove transactions from a specific account:
-
-```csharp
-var account = new Account();
-//...
-ConsoleHelper.AskMultiSelection(account, "Select transaction(s) to remove");
-```
-
-## Logos
-
-- Display Money Tracker logo:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogo();
-  ```
-- Display Money Tracker logo with cricket font:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogoWithCricketFont();
-  ```
-
-### Troubleshooting
-
-If you encounter any issues, please report them on the issue tracking system in our repository.
-
-[//] # moneytracking
-
-## Overview
-
-moneytracking is an open source application designed using .NET 5.0 technology stack to help manage transactions and account book. The program is approximately 640 KB in size.
-
-## Getting started
-
-1. Clone the project from the repository: `git clone https://github.com/moneytracking/MoneyTracking.git`
-2. Navigate to the project directory: `cd MoneyTracking`
-3. Restore NuGet packages: `dotnet restore`
-
-## Features
-
-- Add transactions
-- Remove transactions
-- Display transactions
-- Customizable logos
-
-### Transactions
-
-#### Add
-
-You can add a transaction by creating a new instance of the `Transaction` class in the main method or in the `ConsoleHelper.AskMultiSelection()` method.
-
-```csharp
-var account = new Account();
-
-// In Main Method
-var transaction1 = new Transaction("Personal", "2023-05-17", 100, "Grocery", account);
-account.Transactions.Add(transaction1);
-
-// In ConsoleHelper.AskMultiSelection() method
-var transaction2 = new Transaction("Personal", "2023-05-18", 50, "Gasoline", account);
-account.Transactions.Add(transaction2);
-```
-
-#### Remove
-
-Use the `ConsoleHelper.AskMultiSelection()` method to remove transactions from a specific account:
-
-```csharp
-var account = new Account();
-//...
-ConsoleHelper.AskMultiSelection(account, "Select transaction(s) to remove");
-```
-
-### Logos
-
-- Display Money Tracker logo:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogo();
-  ```
-- Display Money Tracking Logo with cricket font:
-  ```csharp
-  ConsoleHelper.DisplayMoneyTrackerLogoWithCricketFont();
-  ```
-
-## Troubleshooting
-
-If you encounter any issues, please report them on the issue tracking system in our repository.

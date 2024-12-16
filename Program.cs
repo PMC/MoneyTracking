@@ -2,7 +2,6 @@
 using System.Text;
 using MoneyTracking;
 using MoneyTracking.Accounts;
-using MoneyTracking.Transactions;
 using Spectre.Console;
 
 Console.OutputEncoding = Encoding.Unicode;
@@ -12,44 +11,23 @@ choices.Add("Add NEW", MENUCHOICES.NEW);
 choices.Add("Delete Records", MENUCHOICES.EDIT);
 choices.Add("Sort Options", MENUCHOICES.SORT);
 choices.Add("Save and Quit", MENUCHOICES.SAVEANDQUIT);
-
 var options = choices.Select(x => x.Key).ToArray();
-
 bool keepRunning = true;
 
+//display logo
+ConsoleHelper.DisplayMoneyTrackerLogoOther();
 
-ConsoleHelper.DisplayMoneyTrackerLogoOther(); //display logo
+//ask for account to load or create new
+Account bank = ConsoleHelper.DisplayAccountSelection();
 
-AnsiConsole.MarkupLine($"[blue]Loading Account data... [/] [white]DONE![/]");
-
-string accountFile = JsonSerializerHelper.GetFullPathToJsonFile("accounts.json");
-
-
-// Initialize account with salary deposit
-Account bank = BankAccountBuilder.Empty()
-    .WithName("SWEDBANK")
-    .Build();
-
-var sizeOfData = bank.LoadFromFile();
-if (sizeOfData == -1 || bank.Transactions.Count == 0)
-{
-    ConsoleHelper.AskIfUserWantDemoData(bank);
-}
-else
-{
-    AnsiConsole.MarkupLine($"[blue]Loading Transaction data... [/]{sizeOfData} [blue]bytes loaded[/]\n");
-}
-
-AnsiConsole.Markup("Press enter to continue....");
-Console.ReadLine();
-
+//Start Main MENU loop
 while (keepRunning)
 {
     //AnsiConsole.Clear();
     ConsoleHelper.RenderTable(bank);
     AnsiConsole.WriteLine();
 
-    var prompt = ConsoleHelper.DisplayMenu(options);
+    var prompt = ConsoleHelper.DisplayMainMenu(options);
     switch (choices.GetValueOrDefault(prompt))
     {
         case MENUCHOICES.SAVEANDQUIT:
