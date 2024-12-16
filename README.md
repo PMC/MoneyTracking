@@ -15,7 +15,7 @@ This is a project that aims to create a user-friendly money tracking application
 
 *   **AbstractAccountBuilder.cs**: This class serves as a base for all account builders. It provides methods for setting an account name, account ID, and building the final account object.
 *   **BankAccountBuilder.cs**: This class inherits from `AbstractAccountBuilder` and overrides the `Build()` method to create a bank account. It also provides a static method `Empty()` to create a new instance of the builder.
-*   **PersonAccountBuilder.cs**: Similar to `BankAccountBuilder`, this class creates a person account by overriding the `Build()` method.
+*   **PersonAccountBuilder.cs**: Similar to `BankAccountBuilder`, this class creates a person account by overriding the `Build()` method. This account type is meant to track loans, eg a person is loaning money from you.
 *   **TransactionBuilder.cs**: This class demonstrates how to build transactions using the Builder pattern. It allows setting an account ID, transaction date, and building the final transaction object.
 
 **Builder Pattern**
