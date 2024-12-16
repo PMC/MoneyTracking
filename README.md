@@ -31,8 +31,8 @@ To use this project, clone it from the GitHub repository and follow the installa
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your_username/money-tracker.git`
-2. Navigate to the project directory: `cd money-tracker`
+1. Clone the repository: `git clone https://github.com/PMC/MoneyTracker.git`
+2. Navigate to the project directory: `cd MoneyTracker`
 3. Install dependencies using dotnet CLI: `dotnet restore`
 
 After installing the necessary dependencies, you can run the program from the command line using `dotnet run`.
