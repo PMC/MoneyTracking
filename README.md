@@ -38,14 +38,4 @@ To use this project, clone it from the GitHub repository and follow the installa
 
 After installing the necessary dependencies, you can run the program from the command line using `dotnet run`.
 
-## Contributing
 
-If you're interested in contributing to this project, please review our contribution guidelines and feel free to submit pull requests or open issues on GitHub.
-
-## License
-
-This project is licensed under [Your License Name] (https://choosealicense.com/licenses/your_license_name/).
-
-## Contact
-
-For any questions or concerns regarding the Money Tracker application, you can reach out to us via email at `your_email@example.com`.
