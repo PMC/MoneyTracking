@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a project that aims to create a user-friendly money tracking application. The program allows users to manage their finances by recording transactions, categorizing expenses, and analyzing spending patterns.
+This is a project that aims to create a user-friendly money tracking application. The program allows users to manage their finances by recording transactions, categorizing expenses.
 
 ## Features
 
