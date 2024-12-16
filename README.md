@@ -1,5 +1,3 @@
-Based on the provided context, I'll break down the functionality of each file, explain how the Builder functions, and provide an overview of the code. I'll also create a comprehensive README.md file with markup language.
-
 **Overview**
 
 The program is designed to demonstrate various design patterns in software development. It consists of three main classes: `AbstractAccountBuilder`, `BankAccountBuilder`, and `PersonAccountBuilder`. The program allows users to create different types of accounts (bank or person) using the Builder pattern.
