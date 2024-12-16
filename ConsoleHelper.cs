@@ -133,7 +133,15 @@ public class ConsoleHelper
                 );
         }
         table.Caption(DisplayTableCaption(account, accountSummary));
-        table.Title("[bold]Transaction list for:[/][green] " + account.AccountName + "[/]");
+        if (account.AccountType == "Bank")
+        {
+            table.Title("[bold]Transaction list for:[/][green] " + account.AccountName + "[/]");
+        }
+        else
+        {
+            table.Title("[bold]Payments between you and [/][green]" + account.AccountName + "[/]");
+
+        }
         AnsiConsole.Write(table);
 
     }
